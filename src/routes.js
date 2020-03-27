@@ -5,6 +5,7 @@ const connection = require('./database/connection')
 const OngController = require('./controller/OngController')
 const IncidentController = require('./controller/IncidentController')
 const ProfileController = require('./controller/ProfileController')
+const SessionController = require('./controller/SessionController')
 
 /*
     * Acessar Info Body:
@@ -28,5 +29,6 @@ routes.delete('/incidents/:id', IncidentController.delete) //Deletar um incident
 
 routes.get('/profile', ProfileController.index) //Lista todos os incidents de uma ong especifica
 
+routes.post('/sessions', SessionController.create) //Criando uma session (login)
 
 module.exports = routes
