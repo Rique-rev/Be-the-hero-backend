@@ -21,10 +21,16 @@ module.exports = {
     },
 
     async index(request, response) {
-        let incidents = await connection('incidents').select('*')
+        let { page = 1 } = request.query //Numero da pagina
+
+        //Com paginação
+        let incidents = await connection('incidents').limit(5).offset((page - 1) * 5).select('*')
+
+        //Quantidade de incidents
+        let [ count ] = await connection('incidents').count()
+        response.header('X-Total-Count', count['count(*)'])
 
         return response.json(incidents)
-
     },
 
     async delete(request, response) {
