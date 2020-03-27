@@ -2,6 +2,9 @@ const express = require('express')
 const routes = express.Router()
 const crypto = require('crypto')
 const connection = require('./database/connection')
+const OngController = require('./controller/OngController')
+const IncidentController = require('./controller/IncidentController')
+
 /*
     * Acessar Info Body:
         const body = request.body
@@ -14,33 +17,13 @@ const connection = require('./database/connection')
 
 */
 
-routes.get('/ongs', async(request, response) => {
-    let ongs = await connection('ongs').select('*')
-    
-    return response.json(ongs)
-})
+routes.get('/ongs', OngController.index) //Cria uma nova ong
+routes.post('/ongs', OngController.create) //Lista todas as ongs
 
-routes.post('/ongs', async (request, response) => {
-    //criando um id aleatorio
-    const id = crypto.randomBytes(4).toString('HEX')
-    //pegando as informações do body
-    const {name, email, whatsapp, city, uf} = request.body
 
-    //se conectando com o banco de dados e inserindo dados
-    await connection('ongs').insert({
-       id,
-       name,
-       email,
-       whatsapp,
-       city,
-       uf,
-    })
-    return response.json({
-        error:false,
-        message: 'Ong cadastrada',
-        id: id
-    })
-})
+routes.post('/incidents', IncidentController.create) //Criar um novo incident
+routes.get('/incidents', IncidentController.index) //Lista todos os incidents
+routes.delete('/incidents/:id', IncidentController.delete) //Deletar um incidents
 
 
 module.exports = routes
