@@ -14,6 +14,12 @@ const connection = require('./database/connection')
 
 */
 
+routes.get('/ongs', async(request, response) => {
+    let ongs = await connection('ongs').select('*')
+    
+    return response.json(ongs)
+})
+
 routes.post('/ongs', async (request, response) => {
     //criando um id aleatorio
     const id = crypto.randomBytes(4).toString('HEX')
