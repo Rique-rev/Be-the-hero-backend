@@ -23,8 +23,12 @@ module.exports = {
     async index(request, response) {
         let { page = 1 } = request.query //Numero da pagina
 
-        //Com paginação
-        let incidents = await connection('incidents').limit(5).offset((page - 1) * 5).select('*')
+        //Com paginação e join
+        let incidents = await connection('incidents')
+            .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+            .limit(5)
+            .offset((page - 1) * 5)
+            .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.email', 'ongs.city', 'ongs.uf'])
 
         //Quantidade de incidents
         let [ count ] = await connection('incidents').count()
